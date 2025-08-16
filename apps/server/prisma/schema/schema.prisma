@@ -8,3 +8,171 @@ datasource db {
   provider = "postgres"
   url      = env("DATABASE_URL")
 }
+
+enum Level {
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+}
+
+enum Tier {
+  FREE
+  PREMIUM
+  PREMIUM_PLUS
+}
+
+
+enum ExerciseType {
+  AUDIO_IMAGE_MATCH // Type 1: Match audio to image/text
+  AUDIO_FILL_BLANK // Type 2: Fill in blank after audio
+  WORD_USAGE_QUIZ // Type 3: Quiz about word usage
+  SPELLING_BANK // Type 4: Spell word from letter bank
+  SYLLABLE_ASSEMBLY // Type 5: Assemble word from syllables
+  DRAG_MATCH // Type 6: Match pairs by dragging
+  PRONUNCIATION_CHALLENGE // Type 7: Listen and repeat for pronunciation
+  CONVERSATION_RESPONSE // Type 8: Choose correct response in dialogue
+  WORD_ORDER // Type 9: Rearrange words to form sentences
+  AUDIO_TYPING // Type 10: Type what you hear
+  FIND_MISTAKE // Type 11: Identify errors in text
+  ALPHABET_OVERVIEW // Type 12: Overview of the alphabet
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+}
+
+model Language {
+  id   Int    @id @default(autoincrement())
+  code String // e.g., "ro", "en"
+  name String // e.g., "Romanian", "English"
+
+  // Direct relation to units, removing CourseLevel intermediary
+  units Unit[]
+}
+
+model Unit {
+  id          Int      @id @default(autoincrement())
+  orderNumber Int
+  title       String
+  level       Level    @default(A1)
+  languageId  Int
+  language    Language @relation(fields: [languageId], references: [id])
+  objective   String
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  orderNumber Int // New field to maintain lesson order
+  premium     Boolean? @default(false) // New field for monetization
+
+  unitId Int
+  unit   Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  exercises Exercise[]
+  progress  UserLessonProgress[]
+}
+
+model Exercise {
+  id       Int          @id @default(autoincrement())
+  type     ExerciseType
+  audioUrl String?
+  imageUrl String?
+  prompt   String? // Main exercise prompt/question
+
+  // Common fields for all exercise types
+  correctAnswer      String // Stores the correct answer
+  englishTranslation String? // For exercises needing English reference
+
+  // Metadata
+  orderNumber Int // Control exercise sequence within lesson
+
+  // Relations
+  lessonId Int
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  // Exercise content through normalized relations
+  exerciseOptions    ExerciseOption[]
+  exerciseComponents ExerciseComponent[]
+
+  // Track user attempts
+  attempts ExerciseAttempt[]
+
+  @@index([lessonId, orderNumber])
+}
+
+// Normalized model for multiple-choice options
+model ExerciseOption {
+  id         Int     @id @default(autoincrement())
+  text       String  // The option text
+  isCorrect  Boolean @default(false)
+  orderIndex Int     // Order of this option (0-based)
+
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([exerciseId, orderIndex]) // Ensure unique ordering per exercise
+  @@index([exerciseId])
+  @@index([exerciseId, isCorrect]) // Quick lookup for correct answers
+}
+
+// Reusable components for exercises (pairs, syllables, etc.)
+model ExerciseComponent {
+  id         Int                    @id @default(autoincrement())
+  type       ExerciseComponentType
+  content    String                 // The component content
+  pairWith   String?                // For matching exercises - what this pairs with
+  audioUrl   String?                // Component-specific audio
+  imageUrl   String?                // Component-specific image
+  isCorrect  Boolean?               // For components that have correct/incorrect state
+  orderIndex Int                    // Order within the exercise (0-based)
+
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([exerciseId, type, orderIndex]) // Ensure unique ordering per exercise per type
+  @@index([exerciseId, type])
+  @@index([exerciseId, type, isCorrect])
+}
+
+enum ExerciseComponentType {
+  SYLLABLE       // For syllable assembly exercises
+  LETTER_GROUP   // For letter bank exercises
+  MATCH_PAIR     // For drag-and-match exercises
+  DIALOGUE_LINE  // For conversation exercises
+  WORD_FRAGMENT  // For word order exercises
+}
+
+model UserLessonProgress {
+  id           String   @id @default(uuid())
+  completed    Boolean  @default(false)
+  lastAccessed DateTime @default(now())
+
+  userId   String
+  lessonId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+}
+
+model ExerciseAttempt {
+  id         String   @id @default(uuid())
+  exerciseId Int
+  userId     String
+  answer     String // User's submitted answer
+  correct    Boolean
+  timestamp  DateTime @default(now())
+
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, exerciseId])
+}

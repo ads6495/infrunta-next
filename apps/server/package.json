@@ -12,10 +12,11 @@
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:start": "docker compose up -d",
-    "db:watch": "docker compose up",
-    "db:stop": "docker compose stop",
-    "db:down": "docker compose down"
+    "db:start": "docker-compose up -d",
+    "db:watch": "docker-compose up",
+    "db:stop": "docker-compose stop",
+    "db:down": "docker-compose down",
+    "db:reset": "docker-compose down && docker-compose up -d && prisma db push --force-reset && prisma db seed"
   },
   "dependencies": {
     "dotenv": "^17.2.1",

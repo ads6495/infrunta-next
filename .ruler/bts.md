@@ -6,10 +6,8 @@ This is a infrunta-next project created with Better-T-Stack CLI.
 
 This is a monorepo with the following structure:
 
-
-- **`apps/server/`** - Backend server
-(Express)
-
+- **`apps/server/`** - Backend server(Express)
+- **`apps/web/`** Frontend (nextjs 15 using app router)
 
 ## Available Scripts
 
@@ -35,6 +33,7 @@ Database schema is located in `apps/server/prisma/schema.prisma`
 ## Authentication
 
 Authentication is enabled in this project:
+
 - Server auth logic is in `apps/server/src/lib/auth.ts`
 
 ## Adding More Features
@@ -47,6 +46,7 @@ add
 ```
 
 Available addons you can add:
+
 - **Documentation**: Starlight, Fumadocs
 - **Linting**: Biome, Oxlint, Ultracite
 - **Other**: Ruler, Turborepo, PWA, Tauri, Husky

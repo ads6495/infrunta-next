@@ -21,9 +21,12 @@
     "db:start": "turbo -F server db:start",
     "db:watch": "turbo -F server db:watch",
     "db:stop": "turbo -F server db:stop",
-    "db:down": "turbo -F server db:down"
+    "db:down": "turbo -F server db:down",
+    "db:reset": "turbo -F server db:reset"
   },
-  "dependencies": {},
+  "dependencies": {
+    "resend": "^6.0.1"
+  },
   "devDependencies": {
     "turbo": "^2.5.4",
     "husky": "^9.1.7",
@@ -33,5 +36,5 @@
   "lint-staged": {
     "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": "oxlint"
   },
-  "packageManager": "npm@11.5.1"
+  "packageManager": "bun@1.1.34"
 }
