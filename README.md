@@ -22,8 +22,9 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 First, install the dependencies:
 
 ```bash
-npm install
+bun install
 ```
+
 ## Database Setup
 
 This project uses PostgreSQL with Prisma.
@@ -32,21 +33,19 @@ This project uses PostgreSQL with Prisma.
 2. Update your `apps/server/.env` file with your PostgreSQL connection details.
 
 3. Generate the Prisma client and push the schema:
-```bash
-npm run db:push
-```
 
+```bash
+bun db:push
+```
 
 Then, run the development server:
 
 ```bash
-npm run dev
+bun dev
 ```
 
 Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
 The API is running at [http://localhost:3000](http://localhost:3000).
-
-
 
 ## Project Structure
 
@@ -59,10 +58,10 @@ infrunta-next/
 
 ## Available Scripts
 
-- `npm run dev`: Start all applications in development mode
-- `npm run build`: Build all applications
-- `npm run dev:web`: Start only the web application
-- `npm run dev:server`: Start only the server
-- `npm run check-types`: Check TypeScript types across all apps
-- `npm run db:push`: Push schema changes to database
-- `npm run db:studio`: Open database studio UI
+- `bun dev`: Start all applications in development mode
+- `bun build`: Build all applications
+- `bun dev:web`: Start only the web application
+- `bun dev:server`: Start only the server
+- `bun check-types`: Check TypeScript types across all apps
+- `bun db:push`: Push schema changes to database
+- `bun db:studio`: Open database studio UI

@@ -11,17 +11,17 @@ This is a monorepo with the following structure:
 
 ## Available Scripts
 
-- `npm run dev` - Start all apps in development mode
-- `npm run dev:server` - Start only the server
+- `bun dev` - Start all apps in development mode
+- `bun dev:server` - Start only the server
 
 ## Database Commands
 
 All database operations should be run from the server workspace:
 
-- `npm run db:push` - Push schema changes to database
-- `npm run db:studio` - Open database studio
-- `npm run db:generate` - Generate Prisma files
-- `npm run db:migrate` - Run database migrations
+- `bun db:push` - Push schema changes to database
+- `bun db:studio` - Open database studio
+- `bun db:generate` - Generate Prisma files
+- `bun db:migrate` - Run database migrations
 
 Database schema is located in `apps/server/prisma/schema.prisma`
 
@@ -67,7 +67,6 @@ This project includes a `bts.jsonc` configuration file that stores your Better-T
 - This is a Turborepo monorepo using npm workspaces
 - Each app has its own `package.json` and dependencies
 - Run commands from the root to execute across all workspaces
-- Run workspace-specific commands with `npm run command-name`
+- Run workspace-specific commands with `bun command-name`
 - Turborepo handles build caching and parallel execution
-- Use `npx
-create-better-t-stack add` to add more features later
+- Use `bunx create-better-t-stack add` to add more features later
