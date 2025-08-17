@@ -11,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "",
+    origin: [process.env.CORS_ORIGIN || "", "http://localhost:3001"],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -28,9 +28,7 @@ app.use(
   })
 );
 
-
 app.use(express.json());
-
 
 app.get("/", (_req, res) => {
   res.status(200).send("OK");

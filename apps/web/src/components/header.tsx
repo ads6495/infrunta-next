@@ -10,8 +10,9 @@ export default function Header() {
     { to: "/dashboard", label: "Dashboard" },
     { to: "/todos", label: "Todos" },
     { to: "/course", label: "Course" },
+    { to: "/admin", label: "Admin" },
   ];
-
+ 
   return (
     <div>
       <div className="flex flex-row items-center justify-between px-2 py-1">

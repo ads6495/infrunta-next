@@ -1,5 +1,6 @@
 import { useState, memo, useMemo, useCallback } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -59,7 +60,7 @@ const NavigationItem = memo(
     collapsed: boolean;
   }) => {
     return (
-      <Link key={item.name} to={item.href}>
+      <Link key={item.name} href={item.href}>
         <Button
           variant={isActive ? "secondary" : "ghost"}
           className={cn(
@@ -80,8 +81,7 @@ NavigationItem.displayName = "NavigationItem";
 
 export const AdminSidebar = memo(() => {
   const [collapsed, setCollapsed] = useState(false);
-  const routerState = useRouterState();
-  const pathname = routerState.location.pathname;
+  const pathname = usePathname();
 
   const toggleCollapsed = useCallback(() => {
     setCollapsed((prev) => !prev);
