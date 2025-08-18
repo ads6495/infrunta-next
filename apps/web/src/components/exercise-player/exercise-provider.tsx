@@ -1,3 +1,4 @@
+'use client'
 import type React from "react";
 import { createContext, useCallback, useContext, useEffect } from "react";
 import { toast } from "sonner";
@@ -50,114 +51,83 @@ export function ExerciseProvider({
   onSessionComplete,
   enableToastFeedback = true,
 }: ExerciseProviderProps) {
-  const store = useExerciseSessionStore();
-
-  // Derived state
-  const currentExercise = store.getCurrentExercise();
-  const totalExercises = store.currentSession?.exercises.length || 0;
-  const progress =
-    totalExercises > 0
-      ? ((store.currentExerciseIndex + 1) / totalExercises) * 100
-      : 0;
-  const isSessionCompleted = store.isSessionCompleted();
-
-  // Actions with feedback
-  const setAnswer = useCallback(
-    (answer: string) => {
-      store.setCurrentAnswer(answer);
-    },
-    [store]
+  // Select slices to minimize re-renders
+  const currentExerciseIndex = useExerciseSessionStore((s) => s.currentExerciseIndex);
+  const currentAnswer = useExerciseSessionStore((s) => s.currentAnswer);
+  const hasSubmitted = useExerciseSessionStore((s) => s.hasSubmitted);
+  const isCorrect = useExerciseSessionStore((s) => s.isCorrect);
+  const isAudioPlaying = useExerciseSessionStore((s) => s.isAudioPlaying);
+  const showHint = useExerciseSessionStore((s) => s.showHint);
+  const showTranslation = useExerciseSessionStore((s) => s.showTranslation);
+  const totalExercises = useExerciseSessionStore(
+    (s) => s.currentSession?.exercises.length || 0
+  );
+  const isSessionCompleted = useExerciseSessionStore((s) => s.isSessionCompleted());
+  const currentExercise = useExerciseSessionStore(
+    (s) => s.currentSession?.exercises[s.currentExerciseIndex] || null
   );
 
-  const submitAnswer = useCallback(() => {
-    const wasSubmitted = store.hasSubmitted;
-    store.submitAnswer();
+  const setCurrentAnswer = useExerciseSessionStore((s) => s.setCurrentAnswer);
+  const submit = useExerciseSessionStore((s) => s.submitAnswer);
+  const next = useExerciseSessionStore((s) => s.nextExercise);
+  const prev = useExerciseSessionStore((s) => s.previousExercise);
+  const retry = useExerciseSessionStore((s) => s.retryCurrentExercise);
+  const setAudioPlaying = useExerciseSessionStore((s) => s.setAudioPlaying);
+  const toggleHint = useExerciseSessionStore((s) => s.toggleHint);
+  const toggleTranslation = useExerciseSessionStore((s) => s.toggleTranslation);
+  const start = useExerciseSessionStore((s) => s.startSession);
 
-    // Show feedback toast
-    if (enableToastFeedback && !wasSubmitted) {
-      // Wait for state update
-      setTimeout(() => {
-        const isCorrect = store.isCorrect;
-        if (isCorrect === true) {
-          toast.success("Correct! Great job! 🎉");
-        } else if (isCorrect === false) {
-          toast.error("Not quite right. Try again! 💪");
-        }
-      }, 100);
-    }
-  }, [store, enableToastFeedback]);
+  const progress = totalExercises
+    ? ((currentExerciseIndex + 1) / totalExercises) * 100
+    : 0;
 
-  const nextExercise = useCallback(() => {
-    const prevIndex = store.currentExerciseIndex;
-    store.nextExercise();
-
-    // Check if session was completed
-    if (
-      enableToastFeedback &&
-      store.currentExerciseIndex === prevIndex &&
-      store.isSessionCompleted()
-    ) {
-      toast.success("Lesson completed! Excellent work! 🌟");
-    }
-  }, [store, enableToastFeedback]);
-
-  const previousExercise = useCallback(() => {
-    store.previousExercise();
-  }, [store]);
-
-  const retryExercise = useCallback(() => {
-    store.retryCurrentExercise();
-  }, [store, enableToastFeedback]);
-
+  // Action wrappers
+  const setAnswer = useCallback((answer: string) => setCurrentAnswer(answer), [setCurrentAnswer]);
+  const submitAnswer = useCallback(() => submit(), [submit]);
+  const nextExercise = useCallback(() => next(), [next]);
+  const previousExercise = useCallback(() => prev(), [prev]);
+  const retryExercise = useCallback(() => retry(), [retry]);
   const startSession = useCallback(
-    (lessonId: number, exercises: Exercise[]) => {
-      store.startSession(lessonId, exercises);
-    },
-    [store, enableToastFeedback]
+    (lessonId: number, exercises: Exercise[]) => start(lessonId, exercises),
+    [start]
   );
 
   // Audio management - auto-stop when exercise changes
   useEffect(() => {
-    if (store.isAudioPlaying) {
-      store.setAudioPlaying(false);
-    }
-  }, [store.currentExerciseIndex]);
+    if (isAudioPlaying) setAudioPlaying(false);
+  }, [currentExerciseIndex, isAudioPlaying, setAudioPlaying]);
 
-  // Session completion callback
+  // Toast feedback when an answer is submitted
   useEffect(() => {
-    if (isSessionCompleted && onSessionComplete) {
-      onSessionComplete();
-    }
+    if (!enableToastFeedback || !hasSubmitted) return;
+    if (isCorrect === true) toast.success("Correct! Great job! 🎉");
+    else if (isCorrect === false) toast.error("Not quite right. Try again! 💪");
+  }, [hasSubmitted, isCorrect, enableToastFeedback]);
+
+  // Session completion callback only
+  useEffect(() => {
+    if (isSessionCompleted && onSessionComplete) onSessionComplete();
   }, [isSessionCompleted, onSessionComplete]);
 
   const contextValue: ExerciseContextValue = {
-    // Current exercise data
     currentExercise,
-    currentAnswer: store.currentAnswer,
-    hasSubmitted: store.hasSubmitted,
-    isCorrect: store.isCorrect,
-
-    // Session info
-    currentIndex: store.currentExerciseIndex,
+    currentAnswer,
+    hasSubmitted,
+    isCorrect,
+    currentIndex: currentExerciseIndex,
     totalExercises,
     progress,
-
-    // Actions
     setAnswer,
     submitAnswer,
     nextExercise,
     previousExercise,
     retryExercise,
-
-    // UI state
-    isAudioPlaying: store.isAudioPlaying,
-    showHint: store.showHint,
-    showTranslation: store.showTranslation,
-    setAudioPlaying: store.setAudioPlaying,
-    toggleHint: store.toggleHint,
-    toggleTranslation: store.toggleTranslation,
-
-    // Session management
+    isAudioPlaying,
+    showHint,
+    showTranslation,
+    setAudioPlaying,
+    toggleHint,
+    toggleTranslation,
     startSession,
     isSessionCompleted,
     onSessionComplete,
@@ -193,7 +163,6 @@ export function useExerciseAudio() {
   const { isAudioPlaying, setAudioPlaying } = useExercise();
   return [isAudioPlaying, setAudioPlaying] as const;
 }
-
 
 export function useExerciseNavigation() {
   const {

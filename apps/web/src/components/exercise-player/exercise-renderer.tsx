@@ -1,20 +1,61 @@
-import { useMemo } from "react";
+import React from "react";
 import type { Exercise } from "../../lib/types";
 import { Card } from "../ui/card";
-import {
-  AlphabetOverview,
-  AudioFillBlank,
-  AudioImageMatch,
-  AudioTyping,
-  ConversationResponse,
-  DragMatch,
-  FindMistake,
-  PronunciationChallenge,
-  SpellingBank,
-  SyllableAssembly,
-  WordOrder,
-  WordUsageQuiz,
-} from "../exercise-types";
+import dynamic from "next/dynamic";
+
+// Dynamic imports for each exercise type to enable code-splitting
+const loading = () => (
+  <div className="p-6 text-center">Loading…</div>
+);
+
+const AlphabetOverview = dynamic(
+  () => import("../exercise-types/alphabet-overview").then((m) => m.AlphabetOverview),
+  { ssr: false, loading }
+);
+const AudioFillBlank = dynamic(
+  () => import("../exercise-types/audio-fill-blank").then((m) => m.AudioFillBlank),
+  { ssr: false, loading }
+);
+const AudioImageMatch = dynamic(
+  () => import("../exercise-types/audio-image-match").then((m) => m.AudioImageMatch),
+  { ssr: false, loading }
+);
+const AudioTyping = dynamic(
+  () => import("../exercise-types/audio-typing").then((m) => m.AudioTyping),
+  { ssr: false, loading }
+);
+const ConversationResponse = dynamic(
+  () => import("../exercise-types/conversation-response").then((m) => m.ConversationResponse),
+  { ssr: false, loading }
+);
+const DragMatch = dynamic(
+  () => import("../exercise-types/drag-match").then((m) => m.DragMatch),
+  { ssr: false, loading }
+);
+const FindMistake = dynamic(
+  () => import("../exercise-types/find-mistake").then((m) => m.FindMistake),
+  { ssr: false, loading }
+);
+const PronunciationChallenge = dynamic(
+  () => import("../exercise-types/pronunciation-challenge").then((m) => m.PronunciationChallenge),
+  { ssr: false, loading }
+);
+const SpellingBank = dynamic(
+  () => import("../exercise-types/spelling-bank").then((m) => m.SpellingBank),
+  { ssr: false, loading }
+);
+const SyllableAssembly = dynamic(
+  () => import("../exercise-types/syllable-assembly").then((m) => m.SyllableAssembly),
+  { ssr: false, loading }
+);
+const WordOrder = dynamic(
+  () => import("../exercise-types/word-order").then((m) => m.WordOrder),
+  { ssr: false, loading }
+);
+const WordUsageQuiz = dynamic(
+  () => import("../exercise-types/word-usage-quiz").then((m) => m.WordUsageQuiz),
+  { ssr: false, loading }
+);
 
 interface ExerciseRendererProps {
   exercise: Exercise;
