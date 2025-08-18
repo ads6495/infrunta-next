@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import type { DragMatchExercise } from "../../../lib/types";
+import type { DragMatchExercise } from "../../lib/types";
 
 type Pair = { left: string; right: string };
 

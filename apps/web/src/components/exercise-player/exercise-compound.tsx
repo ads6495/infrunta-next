@@ -4,6 +4,9 @@ import { ExerciseControls } from "./exercise-controls";
 import { ExerciseFooter } from "./exercise-footer";
 import { ExerciseHeader } from "./exercise-header";
 import { ExerciseProvider } from "./exercise-provider";
+// Import React for useEffect
+import React from "react";
+import { useExercise } from "./exercise-provider";
 
 interface ExerciseCompoundProps {
 	// Session management
@@ -146,6 +149,3 @@ function ExerciseCompoundContent({
 	);
 }
 
-// Import React for useEffect
-import React from "react";
-import { useExercise } from "./exercise-provider";

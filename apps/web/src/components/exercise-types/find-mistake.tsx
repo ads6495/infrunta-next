@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { FindMistakeExercise } from "../../../lib/types";
-import { Button } from "../../ui/button";
+import type { FindMistakeExercise } from "../../lib/types";
+import { Button } from "../ui/button";
 
 interface FindMistakeProps {
 	exercise: FindMistakeExercise;

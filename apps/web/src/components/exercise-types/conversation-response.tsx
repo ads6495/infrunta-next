@@ -1,6 +1,6 @@
-import type { ConversationResponseExercise } from "../../../lib/types";
-import { Card } from "../../ui/card";
-import { Input } from "../../ui/input";
+import type { ConversationResponseExercise } from "../../lib/types";
+import { Card } from "../ui/card";
+import { Input } from "../ui/input";
 
 interface ConversationResponseProps {
 	exercise: ConversationResponseExercise;

@@ -14,7 +14,7 @@ import {
   SyllableAssembly,
   WordOrder,
   WordUsageQuiz,
-} from "./types";
+} from "../exercise-types";
 
 interface ExerciseRendererProps {
   exercise: Exercise;

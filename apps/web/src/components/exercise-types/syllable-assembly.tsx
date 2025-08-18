@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { SyllableAssemblyExercise } from "../../../lib/types";
-import { Button } from "../../ui/button";
-import { Card } from "../../ui/card";
+import type { SyllableAssemblyExercise } from "../../lib/types";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 
 interface SyllableAssemblyProps {
 	exercise: SyllableAssemblyExercise;

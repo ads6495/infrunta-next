@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { WordOrderExercise } from "../../../lib/types";
-import { Button } from "../../ui/button";
-import { Card } from "../../ui/card";
+import type { WordOrderExercise } from "../../lib/types";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 
 interface WordOrderProps {
   exercise: WordOrderExercise;

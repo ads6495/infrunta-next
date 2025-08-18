@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { AudioFillBlankExercise } from "../../../lib/types";
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
+import type { AudioFillBlankExercise } from "../../lib/types";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface AudioFillBlankProps {
 	exercise: AudioFillBlankExercise;

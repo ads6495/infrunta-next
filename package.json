@@ -25,7 +25,8 @@
     "db:reset": "turbo -F server db:reset"
   },
   "dependencies": {
-    "resend": "^6.0.1"
+    "resend": "^6.0.1",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "turbo": "^2.5.4",

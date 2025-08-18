@@ -20,4 +20,4 @@ export {
 export { ExerciseRenderer } from "./exercise-renderer";
 
 // Exercise type components
-export * from "./types";
+export * from "../exercise-player";

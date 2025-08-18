@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { AudioTypingExercise } from "../../../lib/types";
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
+import type { AudioTypingExercise } from "../../lib/types";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface AudioTypingProps {
 	exercise: AudioTypingExercise;

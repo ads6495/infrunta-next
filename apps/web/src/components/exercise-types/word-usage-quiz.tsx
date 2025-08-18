@@ -1,5 +1,5 @@
-import type { WordUsageQuizExercise } from "../../../lib/types";
-import { Card } from "../../ui/card";
+import type { WordUsageQuizExercise } from "../../lib/types";
+import { Card } from "../ui/card";
 
 interface WordUsageQuizProps {
 	exercise: WordUsageQuizExercise;

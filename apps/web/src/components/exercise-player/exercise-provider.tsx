@@ -189,6 +189,12 @@ export function useExerciseSubmission() {
   return { hasSubmitted, isCorrect, submitAnswer };
 }
 
+export function useExerciseAudio() {
+  const { isAudioPlaying, setAudioPlaying } = useExercise();
+  return [isAudioPlaying, setAudioPlaying] as const;
+}
+
+
 export function useExerciseNavigation() {
   const {
     currentIndex,
@@ -214,7 +220,3 @@ export function useExerciseNavigation() {
   };
 }
 
-export function useExerciseAudio() {
-  const { isAudioPlaying, setAudioPlaying } = useExercise();
-  return [isAudioPlaying, setAudioPlaying] as const;
-}
